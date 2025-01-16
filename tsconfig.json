@@ -28,6 +28,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
+    "allowJs": true,
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"]

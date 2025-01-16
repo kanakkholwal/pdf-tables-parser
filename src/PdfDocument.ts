@@ -1,9 +1,15 @@
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import * as pdfJsLib from 'pdfjs-dist';
+import type { TextContent, TextItem } from 'pdfjs-dist/types/src/display/api';
 import { PdfTable } from './PdfTable';
 import type { Options, PdfPage } from './types';
-import type { TextContent, TextItem } from 'pdfjs-dist/types/src/display/api';
-import * as pdflib from 'pdfjs-dist';
 
+
+pdfJsLib.GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/build/pdf.worker.min.mjs',
+    import.meta.url,
+  ).toString();
+  
 interface _PdfString {
     x: number; y: number; x2: number; y2: number;
     s: string;
@@ -36,13 +42,13 @@ export class PdfDocument {
     }
 
     async load(source: string | Buffer): Promise<void> {
-        let pdfdriver: PDFDocumentProxy | undefined;
+        let pdfDriver: PDFDocumentProxy | undefined;
         try {
-            pdfdriver = await pdflib.getDocument(source).promise as PDFDocumentProxy;
-            this.numPages = pdfdriver.numPages;
+            pdfDriver = await pdfJsLib.getDocument(source).promise as PDFDocumentProxy;
+            this.numPages = pdfDriver.numPages;
             this.pages = [];
             for (let i = 1; i <= this.numPages; i++) {
-                const page = await pdfdriver.getPage(i) as PDFPageProxy;
+                const page = await pdfDriver.getPage(i) as PDFPageProxy;
                 const content = (await page.getTextContent() as TextContent)
                     .items
                     .filter(i => 'transform' in i)
@@ -55,8 +61,8 @@ export class PdfDocument {
         } catch (error) {
             console.error("Error loading PDF document:", error);
         } finally {
-            if (pdfdriver) {
-                pdfdriver.destroy();
+            if (pdfDriver) {
+                pdfDriver.destroy();
             }
         }
 
@@ -214,7 +220,7 @@ export class PdfDocument {
                 text.unshift(t);
                 break;
             }
-            const xOk = t.y === row[0]?.y || !row.some(s =>  t && (s.x <= t.x2 && s.x2 >= t.x));
+            const xOk = t.y === row[0]?.y || !row.some(s =>  (s.x <= t?.x2 && s.x2 >= t?.x));
             if (xOk) row.push(t);
             else skipped.push(t);
         }
