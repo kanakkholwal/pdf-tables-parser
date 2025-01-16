@@ -4,8 +4,12 @@ on:
   push:
     branches:
       - main
-  release:
-    types: [created]
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+  release: 
+    types: [published]
 
 permissions:
   contents: write
@@ -13,42 +17,29 @@ permissions:
   id-token: write
 
 jobs:
-  release-and-publish:
+  release:
     runs-on: ubuntu-latest
 
     steps:
       # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
-        # with:
-        #   fetch-depth: 0
 
       # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
       # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Bump version in package.json
-      - name: Bump version (patch)
-        id: version
-        run: |
-          # Extract the new version number and clean it up
-          NEW_VERSION=$(npm version patch --no-git-tag-version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
-          echo "Updated version to $NEW_VERSION"
-          
-          # Ensure only the version is written to GITHUB_ENV
-          echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
-          
-          # Debug: Verify the written environment variable
-          echo "GITHUB_ENV content:"
-          cat $GITHUB_ENV
-
-
+      # Step 4: Run Changesets versioning
+      - name: Create Release Version
+        id: changesets
+        run: npx changeset version
 
       # Step 5: Build the project
       - name: Build project
@@ -58,31 +49,18 @@ jobs:
       - name: Authenticate with npm registry
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
-      # Step 7: Publish package to NPM
-      - name: Publish to NPM
-        run: npm publish --access public
+      # Step 7: Publish package to npm
+      - name: Publish to npm
+        run: npx changeset publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # Step 8: Create a GitHub Release
-      - name: Create Release
-        uses: actions/create-release@v1
-        with:
-          tag_name: ${{ env.new_version }}
-          release_name: "Release ${{ env.new_version }}"
-          body: |
-            ## What's Changed
-            - Automatic version bump to ${{ env.new_version }}
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Step 9: Push version bump changes back to GitHub
-      - name: Push changes back to GitHub
+      # Step 8: Commit and push changesets version bump
+      - name: Commit and Push Changes
+        if: steps.changesets.outputs.has_changes == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add package.json package-lock.json
-          git commit -m "chore: bump version to ${{ env.new_version }}"
+          git add .
+          git commit -m "chore: version bump via changesets"
           git push origin main
