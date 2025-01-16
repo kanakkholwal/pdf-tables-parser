@@ -2,10 +2,10 @@ import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import { PdfTable } from './PdfTable';
 import type { Options, PdfPage } from './types';
 import type { TextContent, TextItem } from 'pdfjs-dist/types/src/display/api';
-import pdflib from 'pdfjs-dist';
+import * as pdflib from 'pdfjs-dist';
 
 interface _PdfString {
-    x: number; y: number; x2: number; y2: number; //w: number; h: number;
+    x: number; y: number; x2: number; y2: number;
     s: string;
 }
 
@@ -36,13 +36,14 @@ export class PdfDocument {
     }
 
     async load(source: string | Buffer): Promise<void> {
-        const pdfdriver = await p(pdflib.getDocument(source).promise) as PDFDocumentProxy;
-        this.numPages = pdfdriver.numPages;
-        this.pages = [];
+        let pdfdriver: PDFDocumentProxy | undefined;
         try {
+            pdfdriver = await pdflib.getDocument(source).promise as PDFDocumentProxy;
+            this.numPages = pdfdriver.numPages;
+            this.pages = [];
             for (let i = 1; i <= this.numPages; i++) {
-                const page = await p(pdfdriver.getPage(i)) as PDFPageProxy;
-                const content = (await p(page.getTextContent()) as TextContent)
+                const page = await pdfdriver.getPage(i) as PDFPageProxy;
+                const content = (await page.getTextContent() as TextContent)
                     .items
                     .filter(i => 'transform' in i)
                     .map(i => setTextBounds(i as TextItem));
@@ -51,13 +52,12 @@ export class PdfDocument {
                     tables: this._extractTables(content)
                 });
             }
+        } catch (error) {
+            console.error("Error loading PDF document:", error);
         } finally {
-            pdfdriver.destroy();
-        }
-        return;
-
-        function p<T>(promise: Promise<T>): Promise<T> {
-            return new Promise((resolve, reject) => promise.then(resolve, reject));
+            if (pdfdriver) {
+                pdfdriver.destroy();
+            }
         }
 
         function setTextBounds(i: TextItem) {
@@ -111,16 +111,16 @@ export class PdfDocument {
                         cols.splice(i + 1, 1);
 
                         for (let j = t + 1; j < data.length; j++) {
-                            const row = data[j]; // Explicitly extract the row
+                            const row = data[j];
                             if (row?.[i + 1]) {
                                 row[i] = row[i + 1] as string;
-                                data[j] = row; // Explicitly update the row
+                                data[j] = row;
                             }
                         }
             
                         for (const r of data) {
                             if (r) {
-                                r.splice(i + 1, 1); // Safely splice only when `r` exists
+                                r.splice(i + 1, 1);
                             }
                         }
                     }
@@ -136,7 +136,8 @@ export class PdfDocument {
             function infereColumnBounds(): _PdfColumn[] {
                 const { minX, maxX } = getMinMaxX();
                 const result: _PdfColumn[] = [];
-                for (let incr = (maxX - minX) / 200, x = minX; x < maxX; x += incr) {
+                const increment = (maxX - minX) / 200;
+                for (let x = minX; x < maxX; x += increment) {
                     for (const row of rows) {
                         for (const str of row) {
                             if (str.s.length > (me._options.maxStrLength ?? 30)
@@ -204,18 +205,16 @@ export class PdfDocument {
     private _extractNextRow(text: _PdfRow): _PdfRow {
         const row: _PdfRow = [];
         const skipped: _PdfRow = [];
-        const r = Object.assign({}, text[0]);
-        let t: _PdfString;
+        let t: _PdfString | undefined;
 
-        // biome-ignore lint/style/noNonNullAssertion: <explanation>
-        t = text.shift()!;
+        t = text.shift();
         while (t !== undefined) {
-            const yOk = Math.abs(t.y - r.y) <= (this._options.threshold ?? 1.5);
+            const yOk = row[0] ? Math.abs(t.y - row[0].y) <= (this._options.threshold ?? 1.5) : true;
             if (!yOk) {
                 text.unshift(t);
                 break;
             }
-            const xOk = t.y === r.y || !row.some(s => s.x <= t.x2 && s.x2 >= t.x);
+            const xOk = t.y === row[0]?.y || !row.some(s =>  t && (s.x <= t.x2 && s.x2 >= t.x));
             if (xOk) row.push(t);
             else skipped.push(t);
         }
