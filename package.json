@@ -1,0 +1,47 @@
+{
+  "name": "pdf-tables-parser",
+  "description": "Library to extract text tables from pdf files.",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "homepage": "https://github.com/kanakkholwal/pdf-tables-parser#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kanakkholwal/pdf-tables-parser"
+  },
+  "bugs": {
+    "url": "https://github.com/kanakkholwal/pdf-tables-parser/issues"
+  },
+  "author": "Kanak Kholwal (@kanakkholwal)",
+  "scripts": {
+    "build": "tsc",
+    "tsc": "tsc",
+    "cover": "nyc npm run test",
+    "cover:check": "nyc --check-coverage npm run test",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "lint": "tslint src/**/*.ts test/**/*.ts",
+    "postversion": "git push && git push --tags",
+    "prepare": "npm run build",
+    "version": "npm run build"
+  },
+  "dependencies": {
+    "pdfjs-dist": "^4.10.38",
+    "tslib": "^2.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.6",
+    "@types/pdfjs-dist": "^2.10.378",
+    "jasmine": "^5.5.0",
+    "jasmine-ts": "^0.4.0",
+    "nyc": "^17.1.0",
+    "ts-node": "^10.9.2",
+    "tslint": "^6.1.3",
+    "typescript": "^5.7.3",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
+  },
+
+  "keywords": [],
+  "license": "ISC"
+}
