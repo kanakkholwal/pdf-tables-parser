@@ -36,10 +36,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Run Changesets versioning
-      - name: Create Release Version
-        id: changesets
-        run: npx changeset version
 
       # Step 5: Build the project
       - name: Build project
