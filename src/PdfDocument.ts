@@ -6,10 +6,13 @@ import type { Options, PdfPage } from './types';
 
 
 pdfJsLib.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.min.mjs',
+    '../node_modules/pdfjs-dist/build/pdf.worker.min.mjs',
     import.meta.url,
-  ).toString();
-  
+).toString();
+
+// pdfJsLib.
+//     GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfJsLib.version}/pdf.worker.js`;
+
 interface _PdfString {
     x: number; y: number; x2: number; y2: number;
     s: string;
@@ -123,7 +126,7 @@ export class PdfDocument {
                                 data[j] = row;
                             }
                         }
-            
+
                         for (const r of data) {
                             if (r) {
                                 r.splice(i + 1, 1);
@@ -212,18 +215,22 @@ export class PdfDocument {
         const row: _PdfRow = [];
         const skipped: _PdfRow = [];
         let t: _PdfString | undefined;
-
-        t = text.shift();
-        while (t !== undefined) {
+    
+        while (true) {
+            t = text.shift() as _PdfString | undefined;
+            if (t === undefined) break;
+    
             const yOk = row[0] ? Math.abs(t.y - row[0].y) <= (this._options.threshold ?? 1.5) : true;
             if (!yOk) {
                 text.unshift(t);
                 break;
             }
-            const xOk = t.y === row[0]?.y || !row.some(s =>  (s.x <= t?.x2 && s.x2 >= t?.x));
+    
+            const xOk = t.y === row[0]?.y || !row.some(s => t && (s.x <= t.x2 && s.x2 >= t.x));
             if (xOk) row.push(t);
             else skipped.push(t);
         }
+    
         text.unshift(...skipped.reverse());
         return row.sort((a, b) => a.x - b.x);
     }

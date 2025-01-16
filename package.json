@@ -17,6 +17,8 @@
   "scripts": {
     "build": "tsc",
     "lint": "npx eslint src/**/*.ts",
+    "spec": "npx tsx ./spec/index.ts",
+    "spec:build": "tsc && npx tsx ./spec/index.ts",
     "prepare": "npm run build",
     "version": "npm run build"
   },

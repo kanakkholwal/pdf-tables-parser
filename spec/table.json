@@ -1,0 +1,162 @@
+[
+    {
+        "pageNumber": 1,
+        "tables": [
+            {
+                "tableNumber": 1,
+                "numrows": 2,
+                "numcols": 1,
+                "data": [
+                    [
+                        "Example table"
+                    ],
+                    [
+                        "This is an example of a data table."
+                    ]
+                ]
+            },
+            {
+                "tableNumber": 2,
+                "numrows": 1,
+                "numcols": 1,
+                "data": [
+                    [
+                        "Results"
+                    ]
+                ]
+            },
+            {
+                "tableNumber": 3,
+                "numrows": 1,
+                "numcols": 1,
+                "data": [
+                    [
+                        "Ballots"
+                    ]
+                ]
+            },
+            {
+                "tableNumber": 4,
+                "numrows": 1,
+                "numcols": 2,
+                "data": [
+                    [
+                        "Disability",
+                        "Ballots"
+                    ]
+                ]
+            },
+            {
+                "tableNumber": 5,
+                "numrows": 2,
+                "numcols": 4,
+                "data": [
+                    [
+                        "Participants  ",
+                        "Incomplete/"
+                    ],
+                    [
+                        null,
+                        "Accuracy",
+                        " ",
+                        "Time to"
+                    ]
+                ]
+            },
+            {
+                "tableNumber": 6,
+                "numrows": 3,
+                "numcols": 3,
+                "data": [
+                    [
+                        "Category  ",
+                        "Completed"
+                    ],
+                    [
+                        null,
+                        "Terminated"
+                    ],
+                    [
+                        null,
+                        null,
+                        "complete"
+                    ]
+                ]
+            },
+            {
+                "tableNumber": 7,
+                "numrows": 1,
+                "numcols": 7,
+                "data": [
+                    [
+                        "Blind  ",
+                        "5  ",
+                        "1  ",
+                        "4  ",
+                        "34.5%, n=1",
+                        " ",
+                        "1199 sec, n=1"
+                    ]
+                ]
+            },
+            {
+                "tableNumber": 8,
+                "numrows": 1,
+                "numcols": 6,
+                "data": [
+                    [
+                        "Low Vision  ",
+                        "5  ",
+                        "2  ",
+                        "3  ",
+                        "98.3% n=2",
+                        "1716 sec, n=3"
+                    ]
+                ]
+            },
+            {
+                "tableNumber": 9,
+                "numrows": 1,
+                "numcols": 2,
+                "data": [
+                    [
+                        "(97.7%, n=3)",
+                        "(1934 sec, n=2)"
+                    ]
+                ]
+            },
+            {
+                "tableNumber": 10,
+                "numrows": 1,
+                "numcols": 6,
+                "data": [
+                    [
+                        "Dexterity  ",
+                        "5  ",
+                        "4  ",
+                        "1  ",
+                        "98.3%, n=4",
+                        "1672.1 sec, n=4"
+                    ]
+                ]
+            },
+            {
+                "tableNumber": 11,
+                "numrows": 1,
+                "numcols": 8,
+                "data": [
+                    [
+                        "Mobility",
+                        " ",
+                        "3  ",
+                        "3  ",
+                        "0  ",
+                        "95.4%, n=3",
+                        " ",
+                        "1416 sec, n=3"
+                    ]
+                ]
+            }
+        ]
+    }
+]
