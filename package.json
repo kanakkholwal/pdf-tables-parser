@@ -19,7 +19,6 @@
     "tsc": "tsc",
     "cover": "nyc npm run test",
     "lint": "tslint src/**/*.ts test/**/*.ts",
-    "postversion": "git push && git push --tags",
     "prepare": "npm run build",
     "version": "npm run build"
   },
