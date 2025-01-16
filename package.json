@@ -1,7 +1,7 @@
 {
   "name": "pdf-tables-parser",
   "description": "Library to extract text tables from pdf files.",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
