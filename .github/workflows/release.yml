@@ -37,13 +37,18 @@ jobs:
       - name: Bump version (patch)
         id: version
         run: |
-          # Extract the new version number
+          # Extract the new version number and clean it up
           NEW_VERSION=$(npm version patch --no-git-tag-version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
           echo "Updated version to $NEW_VERSION"
-          # Safely write to GITHUB_ENV without extra newlines
-          echo "new_version=${NEW_VERSION}" | tee -a $GITHUB_ENV
+          
+          # Ensure only the version is written to GITHUB_ENV
+          echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
+          
+          # Debug: Verify the written environment variable
+          echo "GITHUB_ENV content:"
+          cat $GITHUB_ENV
 
-    
+
 
       # Step 5: Build the project
       - name: Build project
