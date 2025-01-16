@@ -1,5 +1,7 @@
 # pdf-tables-parser
 
+[![npm version](https://badge.fury.io/js/pdf-tables-parser.svg)](https://www.npmjs.com/package/pdf-tables-parser)
+
 **pdf-tables-parser** is a JavaScript/TypeScript library designed to extract text tables from PDF files efficiently. It provides tools to parse PDF documents and extract structured table data with minimal effort, enabling you to handle tabular data in PDF files seamlessly.
 
 ## Features
@@ -16,6 +18,8 @@ Install the library using npm:
 
 ```bash
 npm install pdf-tables-parser
+# or
+pnpm add pdf-tables-parser
 ```
 
 ## Usage
