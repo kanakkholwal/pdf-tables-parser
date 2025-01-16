@@ -28,14 +28,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
 
       - name: Install pnpm
         run: corepack enable
 
       # Step 3: Install dependencies using pnpm
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       # Step 4: Bump version in package.json
       - name: Bump version (patch)
