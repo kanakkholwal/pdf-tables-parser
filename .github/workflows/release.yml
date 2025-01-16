@@ -20,8 +20,6 @@ jobs:
       # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
-        # with:
-        #   fetch-depth: 0
 
       # Step 2: Set up Node.js
       - name: Set up Node.js
@@ -37,10 +35,10 @@ jobs:
       - name: Bump version (patch)
         id: version
         run: |
-          CURRENT_VERSION=$(node -p "require('./package.json').version")
           NEW_VERSION=$(npm version patch --no-git-tag-version)
-          echo "Updated version from $CURRENT_VERSION to $NEW_VERSION"
-          echo "new_version=${NEW_VERSION}" >> $GITHUB_ENV
+          NEW_VERSION_CLEANED=${NEW_VERSION//v/} # Remove the leading "v"
+          echo "Updated version to $NEW_VERSION_CLEANED"
+          echo "new_version=${NEW_VERSION_CLEANED}" >> $GITHUB_ENV
 
       # Step 5: Build the project
       - name: Build project
