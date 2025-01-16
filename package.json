@@ -1,14 +1,14 @@
 {
   "name": "pdf-tables-parser",
   "description": "Library to extract text tables from pdf files.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "homepage": "https://github.com/kanakkholwal/pdf-tables-parser#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kanakkholwal/pdf-tables-parser"
+    "url": "git+https://github.com/kanakkholwal/pdf-tables-parser.git"
   },
   "bugs": {
     "url": "https://github.com/kanakkholwal/pdf-tables-parser/issues"
@@ -27,11 +27,10 @@
     "tslib": "^2.8.1"
   },
   "devDependencies": {
-    "@types/node": "^22.10.6",
+    "@types/node": "^22.10.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   },
-
   "keywords": [],
   "license": "ISC"
 }
