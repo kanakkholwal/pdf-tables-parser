@@ -30,49 +30,15 @@ jobs:
       # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
-
-      # Step 4: Bump version in package.json
-      # - name: Bump version (patch)
-      #   id: version
-      #   run: |
-      #     # Extract only the version number without extra output
-      #     NEW_VERSION=$(npm version patch --no-git-tag-version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
-      #     echo "Updated version to $NEW_VERSION"
-      #     echo "new_version=${NEW_VERSION}" >> $GITHUB_ENV
     
-      # Step 5: Build the project
       - name: Build project
         run: npm run build
 
-      # Step 6: Authenticate with npm registry
+
       - name: Authenticate with npm registry
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
-      # Step 7: Publish package to NPM
-      - name: Publish to NPM
-        run: npm publish --access public 
+      - name: Publish to npm
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      # Step 8: Create a GitHub Release
-      # - name: Create Release
-      #   uses: actions/create-release@v1
-      #   with:
-      #     tag_name: ${{ env.new_version }}
-      #     release_name: "Release ${{ env.new_version }}"
-      #     body: |
-      #       ## What's Changed
-      #       - Automatic version bump to ${{ env.new_version }}
-      #     draft: false
-      #     prerelease: false
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Step 9: Push version bump changes back to GitHub
-      # - name: Push changes back to GitHub
-      #   run: |
-      #     git config user.name "github-actions[bot]"
-      #     git config user.email "github-actions[bot]@users.noreply.github.com"
-      #     git add package.json package-lock.json
-      #     git commit -m "chore: bump version to ${{ env.new_version }}"
-      #     git push origin main
