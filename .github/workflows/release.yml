@@ -50,7 +50,7 @@ jobs:
 
       # Step 7: Publish package to NPM
       - name: Publish to NPM
-        run: npm publish --access public --otp=<code>
+        run: npm publish --access public 
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
