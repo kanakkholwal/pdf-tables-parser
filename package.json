@@ -1,7 +1,7 @@
 {
   "name": "pdf-tables-parser",
   "description": "Library to extract text tables from pdf files.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,9 +16,7 @@
   "author": "Kanak Kholwal (@kanakkholwal)",
   "scripts": {
     "build": "tsc",
-    "tsc": "tsc",
-    "cover": "nyc npm run test",
-    "lint": "tslint src/**/*.ts test/**/*.ts",
+    "lint": "npx eslint src/**/*.ts",
     "prepare": "npm run build",
     "version": "npm run build"
   },
